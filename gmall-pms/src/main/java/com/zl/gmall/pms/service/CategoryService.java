@@ -5,6 +5,8 @@ import com.zl.gmall.pms.entity.CategoryEntity;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 
+import java.util.List;
+
 
 /**
  * 商品三级分类
@@ -16,5 +18,7 @@ import com.atguigu.core.bean.QueryCondition;
 public interface CategoryService extends IService<CategoryEntity> {
 
     PageVo queryPage(QueryCondition params);
+
+    List<CategoryEntity> queryCategoryByLebelorPid(Integer level, Long pid);
 }
 

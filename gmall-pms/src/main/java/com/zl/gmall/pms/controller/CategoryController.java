@@ -1,6 +1,7 @@
 package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +33,15 @@ import com.zl.gmall.pms.service.CategoryService;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    //商品分类列表查询
+    @GetMapping
+    public Resp<List<CategoryEntity>> queryCategoryByLebelorPid(@RequestParam(value="level",defaultValue = "0")Integer level,
+                                                                @RequestParam(value="parentCid",required = false)Long pid){
+       List<CategoryEntity> categoryList= categoryService.queryCategoryByLebelorPid(level,pid);
+       return Resp.ok(categoryList);
+
+    }
 
     /**
      * 列表

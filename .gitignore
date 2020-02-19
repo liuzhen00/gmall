@@ -24,24 +24,4 @@ mvnw*
 *.rar
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-gmall-admin/Dockerfile
-gmall-admin/LICENSE
-gmall-admin/README.md
-gmall-admin/db/
-gmall-admin/docker-compose.yml
-gmall-admin/pom.xml
-gmall-admin/src/
-gmall-admin/target/classes/META-INF/
-gmall-admin/target/classes/application-dev.yml
-gmall-admin/target/classes/application-prod.yml
-gmall-admin/target/classes/application-test.yml
-gmall-admin/target/classes/application.yml
-gmall-admin/target/classes/banner.txt
-gmall-admin/target/classes/logback-spring.xml
-gmall-admin/target/classes/mapper/
-gmall-admin/target/classes/static/
-gmall-admin/target/generated-sources/
-gmall-admin/target/generated-test-sources/
-gmall-core/pom.xml
-gmall-core/src/
-pom.xml
+
