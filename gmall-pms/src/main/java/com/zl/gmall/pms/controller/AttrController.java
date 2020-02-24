@@ -7,6 +7,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.zl.gmall.pms.vo.AttrVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.zl.gmall.pms.entity.AttrEntity;
 import com.zl.gmall.pms.service.AttrService;
 
-
+import javax.websocket.server.PathParam;
 
 
 /**
@@ -32,6 +33,15 @@ import com.zl.gmall.pms.service.AttrService;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    @ApiOperation("分页查询属性")
+    @GetMapping
+    public Resp<PageVo> queryAttrByIdAndType(QueryCondition queryCondition,
+                                             @RequestParam(value="type",required = false)Integer type,
+                                             @RequestParam("cid")Long cid){
+      PageVo pageVo= attrService.queryAttrByIdAndType(queryCondition,type,cid);
+      return Resp.ok(pageVo);
+    }
 
     /**
      * 列表
@@ -59,13 +69,13 @@ public class AttrController {
     }
 
     /**
-     * 保存
+     * 保存(修改保存属性)
      */
     @ApiOperation("保存")
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('pms:attr:save')")
-    public Resp<Object> save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
+    public Resp<Object> save(@RequestBody AttrVo attrVo){
+		attrService.saveGroupAndAttr(attrVo);
 
         return Resp.ok(null);
     }
@@ -76,7 +86,7 @@ public class AttrController {
     @ApiOperation("修改")
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('pms:attr:update')")
-    public Resp<Object> update(@RequestBody AttrEntity attr){
+    public Resp<Object> update(@RequestBody AttrVo attr){
 		attrService.updateById(attr);
 
         return Resp.ok(null);

@@ -1,12 +1,15 @@
 package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.zl.gmall.pms.vo.AttrGroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,35 @@ import com.zl.gmall.pms.service.AttrGroupService;
 public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
+
+    /**
+     * 查询分类的下的以及规格参数
+     */
+
+    @GetMapping("/withattrs/cat/{catId}")
+    public Resp<List<AttrGroupVo>> queryAttrByCid(@PathVariable("catId")Long catId) {
+        List<AttrGroupVo> attrGroupVo= attrGroupService.queryAttrByCid(catId);
+        return Resp.ok(attrGroupVo);
+    }
+
+    @GetMapping("withattr/{gid}")
+    public Resp<AttrGroupVo> queryArrtGroupById(@PathVariable("gid")Long gid){
+        AttrGroupVo attrGroupVo=attrGroupService.queryArrtGroupById(gid);
+        return Resp.ok(attrGroupVo);
+    }
+
+    /**
+     * 查询分类的分组：
+     * @param queryCondition
+     * @param cid
+     * @return
+     */
+    @ApiOperation("分页查询分组信息")
+    @GetMapping("{cid}")
+    public Resp<PageVo> queryGroupByCid(QueryCondition queryCondition,@PathVariable("cid")Long cid){
+       PageVo pageVo=attrGroupService.queryGroupByCid(queryCondition,cid);
+       return Resp.ok(pageVo);
+    }
 
     /**
      * 列表

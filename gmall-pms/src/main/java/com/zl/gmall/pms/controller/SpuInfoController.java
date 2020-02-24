@@ -5,8 +5,10 @@ import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
+
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.zl.gmall.pms.vo.SpuInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,16 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
+    //查询商品列表
+
+    @GetMapping()
+    public Resp<PageVo> querySpuInfo(QueryCondition condition,
+                                     @RequestParam(value="catId",defaultValue = "0")Long cid){
+        PageVo pageVo=spuInfoService.querySpuInfo(condition,cid);
+
+        return Resp.ok(pageVo);
+    }
+
     /**
      * 列表
      */
@@ -53,6 +65,7 @@ public class SpuInfoController {
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAuthority('pms:spuinfo:info')")
     public Resp<SpuInfoEntity> info(@PathVariable("id") Long id){
+
 		SpuInfoEntity spuInfo = spuInfoService.getById(id);
 
         return Resp.ok(spuInfo);
@@ -64,8 +77,9 @@ public class SpuInfoController {
     @ApiOperation("保存")
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('pms:spuinfo:save')")
-    public Resp<Object> save(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.save(spuInfo);
+    public Resp<Object> save(@RequestBody SpuInfoVo spuInfoVo){
+
+		spuInfoService.spuInfoVo(spuInfoVo);
 
         return Resp.ok(null);
     }
@@ -90,7 +104,6 @@ public class SpuInfoController {
     @PreAuthorize("hasAuthority('pms:spuinfo:delete')")
     public Resp<Object> delete(@RequestBody Long[] ids){
 		spuInfoService.removeByIds(Arrays.asList(ids));
-
         return Resp.ok(null);
     }
 

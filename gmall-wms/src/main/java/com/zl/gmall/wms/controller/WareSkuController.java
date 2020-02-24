@@ -1,12 +1,14 @@
 package com.zl.gmall.wms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,20 @@ import com.zl.gmall.wms.service.WareSkuService;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+
+
+    /**
+     * 对SKU的库存维护
+     * SKU和仓库有一种中间表
+     * 中间表关联的仓库的地址
+     */
+
+    @GetMapping("{skuId}")
+    public Resp<List<WareSkuEntity>> queryWareSku(@PathVariable("skuId")Long skuId){
+        List<WareSkuEntity> list = wareSkuService.list(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId));
+        return  Resp.ok(list);
+    }
 
     /**
      * 列表

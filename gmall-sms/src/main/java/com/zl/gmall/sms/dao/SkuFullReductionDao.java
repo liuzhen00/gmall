@@ -3,6 +3,7 @@ package com.zl.gmall.sms.dao;
 import com.zl.gmall.sms.entity.SkuFullReductionEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 商品满减信息
@@ -12,6 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020-02-18 22:48:07
  */
 @Mapper
+@Repository
 public interface SkuFullReductionDao extends BaseMapper<SkuFullReductionEntity> {
 	
 }

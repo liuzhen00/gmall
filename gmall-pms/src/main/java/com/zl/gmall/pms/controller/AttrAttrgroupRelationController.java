@@ -1,12 +1,14 @@
 package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,15 @@ public class AttrAttrgroupRelationController {
     @Autowired
     private AttrAttrgroupRelationService attrAttrgroupRelationService;
 
+
+    @PostMapping("/delete/attr")
+    public Resp<Object> deleteAttrGroupRelationById(@RequestBody List<AttrAttrgroupRelationEntity> relationEntities){
+        relationEntities.forEach(relations->{
+            attrAttrgroupRelationService.remove(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id",
+                    relations.getAttrId()).eq("attr_group_id",relations.getAttrGroupId()));
+        });
+        return Resp.ok("删除成功");
+    }
     /**
      * 列表
      */

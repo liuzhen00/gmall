@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GmallAdminMainApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(GmallAdminMainApplication.class, args);
 	}
 

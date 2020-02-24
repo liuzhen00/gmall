@@ -1,5 +1,7 @@
 package com.zl.gmall.pms.service.impl;
 
+import com.zl.gmall.pms.vo.SpuInfoVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +14,7 @@ import com.atguigu.core.bean.QueryCondition;
 import com.zl.gmall.pms.dao.SpuInfoDescDao;
 import com.zl.gmall.pms.entity.SpuInfoDescEntity;
 import com.zl.gmall.pms.service.SpuInfoDescService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("spuInfoDescService")
@@ -25,6 +28,19 @@ public class SpuInfoDescServiceImpl extends ServiceImpl<SpuInfoDescDao, SpuInfoD
         );
 
         return new PageVo(page);
+    }
+
+    @Transactional
+    public Long saveSpuInfoDesc(SpuInfoVo spuInfoVo) {
+        //获取新增后的spuId
+        Long spuId = spuInfoVo.getId();
+        //1.2保存SPU的描述信息spu_info_desc
+        SpuInfoDescEntity spuInfoDescEntity = new SpuInfoDescEntity();
+        spuInfoDescEntity.setSpuId(spuId);
+        spuInfoDescEntity.setDecript(StringUtils.join(spuInfoVo.getSpuImages(),","));
+
+        this.save(spuInfoDescEntity);
+        return spuId;
     }
 
 }
