@@ -1,6 +1,7 @@
 package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +33,14 @@ import com.zl.gmall.pms.service.ProductAttrValueService;
 public class ProductAttrValueController {
     @Autowired
     private ProductAttrValueService productAttrValueService;
+
+    //根据SPUID查询受检属性
+    @ApiOperation("根据spuId查询受检属性以及值")
+    @GetMapping("/{spuId}")
+    public Resp<List<ProductAttrValueEntity>> querySearchAttrValueSpuId(@PathVariable("spuId")Long spuId){
+        List<ProductAttrValueEntity> list=productAttrValueService.querySearchAttrValue(spuId);
+        return Resp.ok(list);
+    }
 
     /**
      * 列表

@@ -1,5 +1,7 @@
 package com.zl.gmall.pms.service.impl;
 
+import com.zl.gmall.pms.vo.CategoryVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,8 @@ import com.zl.gmall.pms.service.CategoryService;
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+    @Autowired
+   private CategoryDao categoryDao;
 
     @Override
     public PageVo queryPage(QueryCondition params) {
@@ -41,6 +45,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         }
 
         return this.list(qrWrapper);
+    }
+
+    @Override
+    public List<CategoryVo> queryCategoryByLebe2ByPid(Long pid) {
+        return categoryDao.queryCategoryLeve2Andleve3ByPid(pid);
     }
 
 }

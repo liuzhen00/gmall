@@ -1,0 +1,43 @@
+package com.zl.gmall.index.controller;
+
+import com.atguigu.core.bean.Resp;
+import com.zl.gmall.index.service.IndexService;
+import com.zl.gmall.pms.entity.CategoryEntity;
+import com.zl.gmall.pms.vo.CategoryVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * @author shkstart
+ * @create 2020-03-01 11:57
+ */
+@RestController
+@RequestMapping("/index") //http://localhost:2000/api/index/cates
+public class IndexController {
+
+    @Autowired
+    private IndexService indexService;
+    @GetMapping("/cates")
+    public Resp<List<CategoryEntity>> queryCategoryByPid(){
+        List<CategoryEntity> categoryEntityList=indexService.queryCategoryByPid();
+        return Resp.ok(categoryEntityList);
+    }
+
+    // http://localhost:2000/api/index/cates/2
+    //根据ID查询二级和三级分类
+    @GetMapping("/cates/{pid}")
+    public Resp<List<CategoryVo>> queryCategoryLevelByPid(@PathVariable("pid")Long pid){
+        List<CategoryVo> categoryVoList=indexService.queryCategoryLevelByPid(pid);
+        System.out.println(categoryVoList);
+        return Resp.ok(categoryVoList);
+    }
+
+
+
+
+}

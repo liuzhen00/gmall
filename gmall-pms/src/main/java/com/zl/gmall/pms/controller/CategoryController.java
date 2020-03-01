@@ -8,6 +8,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.zl.gmall.pms.vo.CategoryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,14 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
+    //商品分类列表查询
+    @GetMapping("/{pid}")
+    public Resp<List<CategoryVo>> queryCategoryByLebe2ByPid(@PathVariable("pid") Long pid){
+        List<CategoryVo> categoryList= categoryService.queryCategoryByLebe2ByPid(pid);
+        return Resp.ok(categoryList);
+
+    }
     //商品分类列表查询
     @GetMapping
     public Resp<List<CategoryEntity>> queryCategoryByLebelorPid(@RequestParam(value="level",defaultValue = "0")Integer level,

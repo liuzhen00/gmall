@@ -1,0 +1,10 @@
+server:
+  port: 8087
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1
+  elasticsearch:
+    rest:
+      uris: http://47.102.204.189:9200

@@ -21,6 +21,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.zl</groupId>
+            <artifactId>gmall-wms-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--引入核心模块-->
         <dependency>
             <groupId>com.atguigu</groupId>

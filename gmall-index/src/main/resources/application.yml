@@ -1,0 +1,17 @@
+server:
+  port: 8088
+#\u8BF7\u6C42\u5904\u7406\u7684\u8D85\u65F6\u65F6\u95F4
+ribbon:
+    ReadTimeout: 120000
+#\u8BF7\u6C42\u8FDE\u63A5\u7684\u8D85\u65F6\u65F6\u95F4
+    ConnectTimeout: 30000
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis:
+    host: 47.102.204.189
+    port: 16379
+
+

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zl.gmall.pms.entity.CategoryEntity;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
+import com.zl.gmall.pms.vo.CategoryVo;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     PageVo queryPage(QueryCondition params);
 
     List<CategoryEntity> queryCategoryByLebelorPid(Integer level, Long pid);
+
+    List<CategoryVo> queryCategoryByLebe2ByPid(Long pid);
 }
 

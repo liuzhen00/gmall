@@ -16,5 +16,23 @@
         <result property="productCount" column="product_count"/>
     </resultMap>
 
+    <resultMap type="com.zl.gmall.pms.vo.CategoryVo" id="categoryVoMap">
+        <result property="catId" column="cat_id"/>
+        <result property="name" column="name"/>
+        <result property="parentCid" column="parent_cid"/>
+        <result property="catLevel" column="cat_level"/>
+        <result property="showStatus" column="show_status"/>
+        <result property="sort" column="sort"/>
+        <result property="icon" column="icon"/>
+        <result property="productUnit" column="product_unit"/>
+        <result property="productCount" column="product_count"/>
+        <collection property="subs" javaType="List" ofType="com.zl.gmall.pms.entity.CategoryEntity"
+                    column="cat_id" select="queryCategoryLeve2Andleve3ByPid"/>
+    </resultMap>
+
+    <select id="queryCategoryLeve2Andleve3ByPid" resultMap="categoryVoMap">
+        select * from pms_category where parent_cid = #{pid}
+    </select>
+
 
 </mapper>
