@@ -1,6 +1,7 @@
 package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +33,15 @@ import com.zl.gmall.pms.service.SkuSaleAttrValueService;
 public class SkuSaleAttrValueController {
     @Autowired
     private SkuSaleAttrValueService skuSaleAttrValueService;
+
+    //根据SKU查询销售属性
+    @GetMapping("{spuId}")
+    public Resp<List<SkuSaleAttrValueEntity>> querySkuSaleBySpuId(@PathVariable("spuId")Long spuId){
+        List<SkuSaleAttrValueEntity> attrValueEntityList=this.skuSaleAttrValueService.querySkuSaleBySpuId(spuId);
+
+        return Resp.ok(attrValueEntityList);
+
+    }
 
     /**
      * 列表

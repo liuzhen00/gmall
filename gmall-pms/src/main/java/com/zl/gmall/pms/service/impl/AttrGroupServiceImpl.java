@@ -1,19 +1,18 @@
 package com.zl.gmall.pms.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.zl.gmall.pms.dao.AttrAttrgroupRelationDao;
 import com.zl.gmall.pms.dao.AttrDao;
+import com.zl.gmall.pms.dao.ProductAttrValueDao;
 import com.zl.gmall.pms.entity.AttrAttrgroupRelationEntity;
 import com.zl.gmall.pms.entity.AttrEntity;
+import com.zl.gmall.pms.entity.ProductAttrValueEntity;
 import com.zl.gmall.pms.vo.AttrGroupVo;
+import com.zl.gmall.pms.vo.ItemGroupVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -38,6 +37,9 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
     //属性表
     @Autowired
     private AttrDao attrDao;
+
+    @Autowired
+    private ProductAttrValueDao attrValueDao;
 
     @Override
     public PageVo queryPage(QueryCondition params) {
@@ -110,6 +112,36 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         }).collect(Collectors.toList());
 
         return attrGroupVOs;
+
+    }
+
+    @Override
+    public List<ItemGroupVo> queryItemGroupVoById(Long spuId,Long cid) {
+
+        //根据分类查分组
+        List<AttrGroupEntity> groupEntityList = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", cid));
+        if(CollectionUtils.isEmpty(groupEntityList)){
+            return null;
+        }
+        //分组遍历每个组下的Attr
+    return  groupEntityList.stream().map(group ->{
+            ItemGroupVo groupVo = new ItemGroupVo();
+            groupVo.setId(group.getAttrGroupId());
+            groupVo.setName(group.getAttrGroupName());
+            List<AttrAttrgroupRelationEntity> relationEntities = this.attrgroupRelationDao.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", group.getAttrGroupId()));
+            //根据关系表去查询attrId,得到规格参数的分组
+            if(!CollectionUtils.isEmpty(relationEntities)){
+                List<Long> attrIds = relationEntities.stream().map(AttrAttrgroupRelationEntity::getAttrId).collect(Collectors.toList());
+                List<ProductAttrValueEntity> productAttrValueEntities = this.attrValueDao.selectList(new QueryWrapper<ProductAttrValueEntity>().in("attr_id", attrIds));
+                groupVo.setAttrs(productAttrValueEntities);
+            }
+           return groupVo;
+
+
+        }).collect(Collectors.toList());
+
+
+
 
     }
 

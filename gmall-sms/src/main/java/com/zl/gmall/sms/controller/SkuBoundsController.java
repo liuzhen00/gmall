@@ -1,12 +1,14 @@
 package com.zl.gmall.sms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.zl.gmall.sms.vo.SaleVo;
 import com.zl.gmall.sms.vo.SkuSaleDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,14 @@ import com.zl.gmall.sms.service.SkuBoundsService;
 public class SkuBoundsController {
     @Autowired
     private SkuBoundsService skuBoundsService;
+
+    //根据skuId查询营销信息
+    @GetMapping("{skuId}")
+    public Resp<List<SaleVo>> querySkuBySaleInfo(@PathVariable("skuId")Long skuId){
+        List<SaleVo> saleVoList= skuBoundsService.querySkuBySaleInfo(skuId);
+
+        return Resp.ok(saleVoList);
+    }
 
     @ApiOperation("新增SKU的营销信息")
     @PostMapping("/skusale/save")

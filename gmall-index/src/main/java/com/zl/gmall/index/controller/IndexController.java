@@ -36,6 +36,18 @@ public class IndexController {
         System.out.println(categoryVoList);
         return Resp.ok(categoryVoList);
     }
+    /*
+        无法使用本地锁来解决并发的问题：
+        本地锁是一个单线程的，分布式是多进程多线程的，由于进程和进程之间不存在线程的
+        共享的问题，所以JVM锁是无法解决分布式的问题
+     */
+
+    @GetMapping("test/lock")
+    public Resp<Object> test(){
+        indexService.testLock();
+        return Resp.ok(null);
+
+    }
 
 
 

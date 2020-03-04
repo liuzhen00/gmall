@@ -5,6 +5,7 @@ import com.zl.gmall.pms.entity.CategoryEntity;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.zl.gmall.pms.vo.CategoryVo;
+import com.zl.gmall.pms.vo.ItemGroupVo;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     List<CategoryEntity> queryCategoryByLebelorPid(Integer level, Long pid);
 
     List<CategoryVo> queryCategoryByLebe2ByPid(Long pid);
+
+
 }
 

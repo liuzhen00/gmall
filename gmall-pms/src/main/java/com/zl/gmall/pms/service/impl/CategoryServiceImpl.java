@@ -1,6 +1,7 @@
 package com.zl.gmall.pms.service.impl;
 
 import com.zl.gmall.pms.vo.CategoryVo;
+import com.zl.gmall.pms.vo.ItemGroupVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     public List<CategoryVo> queryCategoryByLebe2ByPid(Long pid) {
         return categoryDao.queryCategoryLeve2Andleve3ByPid(pid);
     }
+
 
 }

@@ -2,14 +2,13 @@ package com.zl.gmall.pms.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zl.gmall.pms.vo.AttrGroupVo;
+import com.zl.gmall.pms.vo.ItemGroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +39,17 @@ public class AttrGroupController {
      * 查询分类的下的以及规格参数
      */
 
-    @GetMapping("/withattrs/cat/{catId}")
-    public Resp<List<AttrGroupVo>> queryAttrByCid(@PathVariable("catId")Long catId) {
-        List<AttrGroupVo> attrGroupVo= attrGroupService.queryAttrByCid(catId);
-        return Resp.ok(attrGroupVo);
+    @GetMapping("/attrGroupVallue")
+    public Resp<List<ItemGroupVo>> queryItemGroupVoById(@RequestParam("spuId")Long spuId,
+                                                         @RequestParam("cid")Long cid){
+        List<ItemGroupVo> itemGroupVoList= attrGroupService.queryItemGroupVoById(spuId,cid);
+        return Resp.ok(itemGroupVoList);
+
     }
 
     @GetMapping("withattr/{gid}")
     public Resp<AttrGroupVo> queryArrtGroupById(@PathVariable("gid")Long gid){
-        AttrGroupVo attrGroupVo=attrGroupService.queryArrtGroupById(gid);
+        AttrGroupVo attrGroupVo =  attrGroupService.queryArrtGroupById(gid);
         return Resp.ok(attrGroupVo);
     }
 
