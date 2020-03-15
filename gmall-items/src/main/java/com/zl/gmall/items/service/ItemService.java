@@ -16,6 +16,8 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author shkstart
@@ -33,88 +35,115 @@ public class ItemService {
     @Autowired
     private GmallWmsApi gmallWmsApi;
 
+    @Autowired
+    private ThreadPoolExecutor threadPoolExecutor;
+
     public ItemVo queryItemBySkuId(Long skuId) {
 
         ItemVo itemVo=new ItemVo();
         itemVo.setSkuId(skuId);
 
         //查询sku的基本信息
+        CompletableFuture<SkuInfoEntity> skuFuture = CompletableFuture.supplyAsync(() -> {
 
-        Resp<SkuInfoEntity> skuInfoEntityResp = this.gmallPmsApi.querySkuById(skuId);
-        SkuInfoEntity skuInfoEntity = skuInfoEntityResp.getData();
-        if(skuInfoEntity==null){
-            return null;
-        }
-        itemVo.setPrice(skuInfoEntity.getPrice());
-        itemVo.setWeight(skuInfoEntity.getWeight());
-        itemVo.setSkuSubTitle(skuInfoEntity.getSkuSubtitle());
-        itemVo.setSkuTitle(skuInfoEntity.getSkuTitle());
-
+            Resp<SkuInfoEntity> skuInfoEntityResp = this.gmallPmsApi.querySkuById(skuId);
+            SkuInfoEntity skuInfoEntity = skuInfoEntityResp.getData();
+            if (skuInfoEntity == null) {
+                return null;
+            }
+            itemVo.setPrice(skuInfoEntity.getPrice());
+            itemVo.setWeight(skuInfoEntity.getWeight());
+            itemVo.setSkuSubTitle(skuInfoEntity.getSkuSubtitle());
+            itemVo.setSkuTitle(skuInfoEntity.getSkuTitle());
+            return skuInfoEntity;
+        }, threadPoolExecutor);
         //分类信息
+        CompletableFuture<Void> categoryFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
         Resp<CategoryEntity> categoryEntityResp = this.gmallPmsApi.info(skuInfoEntity.getCatalogId());
         CategoryEntity categoryEntity = categoryEntityResp.getData();
         if(categoryEntity!=null){
             itemVo.setCategoryId(skuInfoEntity.getCatalogId());
             itemVo.setCategoryName(categoryEntity.getName());
         }
+        }, threadPoolExecutor);
         //根据品牌ID查询
+        CompletableFuture<Void> brandFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
         Resp<BrandEntity> brandEntityResp = this.gmallPmsApi.queryByBrandId(skuInfoEntity.getBrandId());
         BrandEntity brandEntity = brandEntityResp.getData();
         if(brandEntity!=null){
             itemVo.setBrandId(skuInfoEntity.getBrandId());
             itemVo.setBrandName(brandEntity.getName());
         }
+        }, threadPoolExecutor);
 
         //根据spu查询spu的信息
+        CompletableFuture<Void> spuFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
         Resp<SpuInfoEntity> spuInfoEntityResp = this.gmallPmsApi.querySpuById(skuInfoEntity.getSpuId());
         SpuInfoEntity spuInfoEntity = spuInfoEntityResp.getData();
         if(spuInfoEntity!=null){
             itemVo.setSpuId(skuInfoEntity.getSpuId());
             itemVo.setSpuName(spuInfoEntity.getSpuName());
         }
-        //根据skuid查询营销信息
-        Resp<List<SaleVo>> skuBySaleInfo = this.gmallSmsApi.querySkuBySaleInfo(skuId);
-        List<SaleVo> saleVos = skuBySaleInfo.getData();
-        if(!CollectionUtils.isEmpty(saleVos)){
-            itemVo.setSales(saleVos);
-        }
+        }, threadPoolExecutor);
 
+        CompletableFuture<Void> salesFuture = CompletableFuture.runAsync(() -> {
+
+            //根据skuid查询营销信息
+            Resp<List<SaleVo>> skuBySaleInfo = this.gmallSmsApi.querySkuBySaleInfo(skuId);
+            List<SaleVo> saleVos = skuBySaleInfo.getData();
+            if (!CollectionUtils.isEmpty(saleVos)) {
+                itemVo.setSales(saleVos);
+            }
+        }, threadPoolExecutor);
+
+        CompletableFuture<Void> storeFuture = CompletableFuture.runAsync(() -> {
         //根据Sku查询库存
         Resp<List<WareSkuEntity>> wareSkuEntityResp = this.gmallWmsApi.queryWareSku(skuId);
         List<WareSkuEntity> wareSkuEntities = wareSkuEntityResp.getData();
         if(!CollectionUtils.isEmpty(wareSkuEntities)){
             itemVo.setStore(wareSkuEntities.stream().anyMatch(wareSkuEntity -> wareSkuEntity.getStock()>0));
         }
+        }, threadPoolExecutor);
 
-        //根据Spu查询所有的销售属性
-        Resp<List<SkuSaleAttrValueEntity>> skuSaleBySpuId = this.gmallPmsApi.querySkuSaleBySpuId(skuInfoEntity.getSpuId());
-        List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = skuSaleBySpuId.getData();
-        if(!CollectionUtils.isEmpty(skuSaleAttrValueEntities)){
-            itemVo.setSaleAttrs(skuSaleAttrValueEntities);
-        }
+        CompletableFuture<Void> saleAttrFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
+            //根据Spu查询所有的销售属性
+            Resp<List<SkuSaleAttrValueEntity>> skuSaleBySpuId = this.gmallPmsApi.querySkuSaleBySpuId(skuInfoEntity.getSpuId());
+            List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = skuSaleBySpuId.getData();
+            if (!CollectionUtils.isEmpty(skuSaleAttrValueEntities)) {
+                itemVo.setSaleAttrs(skuSaleAttrValueEntities);
+            }
 
-        //根据SkuId查询Sku的图片信息
-        Resp<List<SkuImagesEntity>> skuImagesListResp = this.gmallPmsApi.querySkuImageById(skuId);
-        List<SkuImagesEntity> skuImagesEntities = skuImagesListResp.getData();
-        if(!CollectionUtils.isEmpty(skuImagesEntities)){
-            itemVo.setImages(skuImagesEntities);
-        }
+        }, threadPoolExecutor);
 
+        CompletableFuture<Void> imageFuture = CompletableFuture.runAsync(() -> {
+            //根据SkuId查询Sku的图片信息
+            Resp<List<SkuImagesEntity>> skuImagesListResp = this.gmallPmsApi.querySkuImageById(skuId);
+            List<SkuImagesEntity> skuImagesEntities = skuImagesListResp.getData();
+            if (!CollectionUtils.isEmpty(skuImagesEntities)) {
+                itemVo.setImages(skuImagesEntities);
+            }
+
+        }, threadPoolExecutor);
         //根据spu添加描述信息
-        Resp<SpuInfoDescEntity> spuInfoDescEntityResp = this.gmallPmsApi.querySpuDescById(spuInfoEntity.getId());
+        CompletableFuture<Void> spuInfoDescFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
+        Resp<SpuInfoDescEntity> spuInfoDescEntityResp = this.gmallPmsApi.querySpuDescById(skuInfoEntity.getSpuId());
         SpuInfoDescEntity descEntity = spuInfoDescEntityResp.getData();
         if(descEntity!=null){
             String[] split = descEntity.getDecript().split(",");
             itemVo.setDesc(Arrays.asList(split));
         }
+        }, threadPoolExecutor);
 
         //根据分类ID查询规格参数
-        Resp<List<ItemGroupVo>> listResp = this.gmallPmsApi.queryItemGroupVoById(spuInfoEntity.getId(),categoryEntity.getCatId());
+        CompletableFuture<Void> groupFuture = skuFuture.thenAcceptAsync(skuInfoEntity -> {
+        Resp<List<ItemGroupVo>> listResp = this.gmallPmsApi.queryItemGroupVoById(skuInfoEntity.getSpuId(),skuInfoEntity.getCatalogId());
         List<ItemGroupVo> itemGroupVos = listResp.getData();
         if(!CollectionUtils.isEmpty(itemGroupVos)){
             itemVo.setAttrGroups(itemGroupVos);
         }
+        }, threadPoolExecutor);
 
+        CompletableFuture.allOf(categoryFuture,brandFuture,spuFuture,salesFuture,storeFuture,imageFuture,saleAttrFuture,spuInfoDescFuture,groupFuture).join();
         return itemVo;
 
     }

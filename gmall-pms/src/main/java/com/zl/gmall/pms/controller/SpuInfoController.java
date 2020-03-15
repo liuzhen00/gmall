@@ -12,6 +12,8 @@ import com.atguigu.core.bean.Resp;
 import com.zl.gmall.pms.vo.SpuInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,9 @@ import com.zl.gmall.pms.service.SpuInfoService;
 public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     //查询商品列表
 
@@ -106,6 +111,8 @@ public class SpuInfoController {
     public Resp<Object> update(@RequestBody SpuInfoEntity spuInfo){
 		spuInfoService.updateById(spuInfo);
 
+		//通知修改缓存中的数据
+        this.amqpTemplate.convertAndSend("PMS-SPU-EXCHANGE","item.update",spuInfo.getId());
         return Resp.ok(null);
     }
 

@@ -1,0 +1,30 @@
+server:
+  port: 8095
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis:
+    host: 47.102.204.189
+    port: 16379
+  rabbitmq:
+    host: 47.102.204.189
+    virtual-host: /
+    username: zl
+    password: lz.com
+ribbon:
+  ReadTimeout: 120000
+  ConnectTimeout: 30000
+auth:       # \u914D\u7F6E\u516C\u94A5
+  jwt:
+    publicKeyPath: D:\\DMEO\\06project\\secret\\rsa.pub # \u516C\u94A5\u5730\u5740
+    cookieName: GMALL_TOKEN # cookie\u7684\u540D\u79F0
+    expire: 43200 # \u8FC7\u671F\u65F6\u95F4\uFF0C\u4E00\u4E2A\u6708
+alipay:
+  app_id: 2016101600702073
+  merchant_private_key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC8fdj3CMgA0tHD01bGBsTmG2IaBhLhWYCjaTVlAHjySLYB6wv5UQl4EyI4eNPhBsP0pSndDdoQQZ9RpcJl3s5ojgsYH8nd+Cdbs/MPku3+f858zd/f2ntjGmpA23unjS65RAfdPbWqW7PBi5oxPZkzfXWgsfzIKAvFuFzziRfryMB+3qrqf4VVygcG9pKrnmc1rZMyCmdvpsRyY8sn+yBIjwi5BnOr35dVW1wtXMJPh9OkGw4RilIPBmkIDOJQo/qXcrMReNBWe+zSxxSOCpP1kBtRclYfHhdmlHpoIMStcAH+mksfsQqAcyIsiJruuYlxMO86tVEFOQMGs/9LB6UZAgMBAAECggEAddZLLGzt9C3X+4+EwPn8YEqgMtq3NPBqTj54pfL8qaMxPdO+wZeaztlPXHSVKSm8mZYjrNF7EQylWDrDZEI9UfnzD5rX7Y+0s0y1WHgnlyI5aaafHegNmTArWu6byGyn2CSisfphNuZrY0UuGTiELT9yqQp8mHkImwwd+BYtwTXF7fvRq3m70NHaQJEUG+VATNkw6z20ShoIn6hpme8htGVu+acW6yFglnOpxqg7O56HMspujD1gL4gLC+f4s46uUFYaMU0UZiHC6tbkpoI8ykiYFnfzUjJNagMfg6s43HPLJMTepz9apKJKyNDwUTmaqKPW10kdrrE3ygJDQTJNvQKBgQDivWJEMoMUO3f9IuwCS5uew8HdSejIIJSUllzNsEWoWhUmXCVSNS4zYoqHVY4f6tiY+ZWVX7sGCMTz9KNX0ipt42zttH9rOZWqZFjij3hIe28ZxSpVLjbLKs6lqQmDJpxnZjf+PIaRNFetY6mWMjG1xyRQZybuaOYz+YlhTj8CTwKBgQDU0OO+kXmk1EdighP4P0+npZ3FPMk0iewGH2PmqlJqhPQeKjroxwnLHzItyS4HNf4FinaqxUrhP1hdxrH8ipaBUZPfjCDq4CotruVEOXmf5RdwAvyU3OYTVy5Jhcud4P+OnrULUq+YUf5a6nnzeKfRppjcalJ9LgDz6Ktxgk6QFwKBgQC5o2bGATkyonHd7e6e/no+JXYfEHknCQ29DdKTkUOmz4JLctwXj3TxGzfiD9kaJrQJoyamMsez7BAc0Gm/6FFWwQIZKFO+XVo9NIVVkTNg3LacucGsFfdEphqkpV4lY8JgId+sJq/iSKGUU2mwkA4FDzObJKlKPtZjLWYeJesOnwKBgQC/RuDrr6U92O4wQ+ne/kiBzgF3/aJ6blyNRDluYTeiNc2ULzCzd/H9dxSKwn90S7r9D+6InrsmqOCrqKLg8U9E/CWEj1YmxUQju0alg2Mlq6rdKlILGmBQkdMwkejpBgmsDkl6296ncUrEPGtPwepULQDHW2i4ylhg4Yb2hsBGEQKBgE3GftIi2mX6BfHrr6Jk6ljOMe2ZDUBrj/yQDn+NanQwieNmtIaWw7oyRIPs76rdX3/BVlzSh6BLiu0OtxTayV4iqmMaOzW3rojPvw8BMRGDJw5zuWrfQ+02qaJGZsdzprYfN1fPabT6V2hny4dK5aEmvN191n6lHDzSyFppuG+b
+  alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkv9Dbcud9Tpukn2x6aJzhOnk1v5BV/FHtou93CXB+Esn3e1T1xmOWQMVPnhxCAuIqosuSXNZeAJEPtBifbTjhjlo1mvvIH0X/YE2kvbFos1oXYRo+0FH2mZUP8C6MSMHQ2SOIZyhBrkjkZ4tspBbxtWpncjadmaISWyY5YwtWdVuf4OZpPfri4eXB5qGrbebZct4IQ28XuRfgL9wEPenjwP8oasa3eFI/qlnvY1UvwUYTwJKIsasAPUS4nroKsCVD6EanP8c1DEtX8UywLGFw08K0kLOKQAK2YVDwytKG6FVsvWQu4QXHJKOaBXOaV+udyme1EcDiO9lZO+ehROpKwIDAQAB
+  notify_url: http://wk2gc1ofz7.52http.net/api/order/pay/success
+  return_url: http://www.baidu.com
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do

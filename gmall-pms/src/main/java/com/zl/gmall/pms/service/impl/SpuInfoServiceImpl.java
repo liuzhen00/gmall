@@ -13,6 +13,7 @@ import com.zl.gmall.pms.vo.SpuInfoVo;
 import com.zl.gmall.sms.vo.SkuSaleDTO;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,21 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     private SpuInfoDescService spuInfoDescService;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    //发送消息
+
+    private void sendMessage(Long id,String type){
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (Exception e) {
+            System.out.println("商品信息发送异常:"+type+"类型的，ID为:"+id);
+        }
+
+    }
+
     @Override
     public PageVo queryPage(QueryCondition params) {
         IPage<SpuInfoEntity> page = this.page(
@@ -106,7 +122,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }
         saveSkuInfoAndSaleInfo(spuInfoVo, spuId, skusVo);
 
-
+          //消息队列更新es
+        sendMessage(spuInfoVo.getId(),"insert");
     }
 
     private void saveSkuInfoAndSaleInfo(SpuInfoVo spuInfoVo, Long spuId, List<SkuInfoVo> skusVo) {

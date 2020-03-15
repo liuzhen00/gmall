@@ -73,7 +73,10 @@ public interface GmallPmsApi {
     //根据分类ID查询规格参数组
     @GetMapping("pms/attrgroup/attrGroupVallue")
     public Resp<List<ItemGroupVo>> queryItemGroupVoById(@RequestParam("spuId")Long spuId,
-                                                         @RequestParam("cid")Long cid);
+                                                        @RequestParam("cid")Long cid);
+
+    @GetMapping("pms/skusaleattrvalue/sku/{skuId}")
+    public Resp<List<SkuSaleAttrValueEntity>> querySkuSaleById(@PathVariable("skuId")Long skuId);
 
 
 

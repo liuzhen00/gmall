@@ -1,10 +1,16 @@
 package com.zl.gmall.search.service;
 
 import com.alibaba.fastjson.JSON;
-import com.zl.gmall.search.vo.GoodsVo;
-import com.zl.gmall.search.vo.SearchParamVo;
-import com.zl.gmall.search.vo.SearchResponseAttrVo;
-import com.zl.gmall.search.vo.SearchResponseVo;
+import com.atguigu.core.bean.Resp;
+import com.zl.gmall.pms.entity.BrandEntity;
+import com.zl.gmall.pms.entity.CategoryEntity;
+import com.zl.gmall.pms.entity.ProductAttrValueEntity;
+import com.zl.gmall.pms.entity.SkuInfoEntity;
+import com.zl.gmall.search.feign.GmallPmsFeign;
+import com.zl.gmall.search.feign.GmallWmsFeign;
+import com.zl.gmall.search.repository.GoodsRepository;
+import com.zl.gmall.search.vo.*;
+import com.zl.gmall.wms.entity.WareSkuEntity;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
@@ -12,6 +18,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.index.Index;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -50,6 +57,8 @@ public class SearcherService {
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
+
+
 
     public SearchResponseVo search(SearchParamVo searchParamVo) throws IOException {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -264,6 +273,11 @@ public class SearcherService {
 
         System.out.println(sourceBuilder.toString());
         return sourceBuilder;
+
+    }
+
+    //创建索引
+    public void createIndex(Long id){
 
     }
 }

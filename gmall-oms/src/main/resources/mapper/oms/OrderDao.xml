@@ -49,5 +49,14 @@
         <result property="modifyTime" column="modify_time"/>
     </resultMap>
 
+   <!--订单失效 void closeOrder(String orderToken);-->
+    <update id="closeOrder">
+         update oms_order set `status`=4 where order_sn=#{orderToken} and `status`=0
+    </update>
+
+    <!--修改订单状态-->
+    <update id="payOrder">
+         update oms_order set `status`=1 where order_sn=#{orderToken} and `status`=0
+    </update>
 
 </mapper>

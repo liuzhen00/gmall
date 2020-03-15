@@ -7,6 +7,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.zl.gmall.oms.vo.OrderSubmitVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,13 @@ import com.zl.gmall.oms.service.OrderService;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
+    //下单
+    @PostMapping("/saveOrder")
+    public Resp<OrderEntity> saveOrder(@RequestBody OrderSubmitVo orderSubmitVo){
+        OrderEntity orderEntity= this.orderService.saveOrder(orderSubmitVo);
+        return Resp.ok(orderEntity);
+    }
 
     /**
      * 列表

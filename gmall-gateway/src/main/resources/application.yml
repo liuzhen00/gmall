@@ -39,4 +39,25 @@ spring:
             - Path=/api/item/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
-
+        - id: auth-route # 认证管理路由
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+        - id: cart-route # 购物车管理路由
+          uri: lb://cart-service
+          predicates:
+            - Path=/api/cart/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+        - id: order-route # 订单管理路由
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+auth:
+  jwt:
+    publicKeyPath: D:\\DMEO\\06project\\secret\\rsa.pub # 公钥地址
+    cookieName: GMALL_TOKEN # cookie的名称

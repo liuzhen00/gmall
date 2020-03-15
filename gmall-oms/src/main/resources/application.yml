@@ -1,0 +1,10 @@
+spring:
+  rabbitmq:
+    host: 47.102.204.189
+    virtual-host: /
+    username: zl
+    password: lz.com
+
+
+
+

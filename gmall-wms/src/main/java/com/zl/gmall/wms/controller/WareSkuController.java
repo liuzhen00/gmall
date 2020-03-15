@@ -9,6 +9,7 @@ import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zl.gmall.wms.vo.SkuLockVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,12 @@ public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
 
-
+    //检验库存并锁住库存
+    @PostMapping("check/lock")
+    public Resp<List<SkuLockVo>> checkAndCheck(@RequestBody List<SkuLockVo> skuLockVos){
+        List<SkuLockVo> skuLockVoList= this.wareSkuService.checkAndCheck(skuLockVos);
+        return Resp.ok(skuLockVoList);
+    }
 
     /**
      * 对SKU的库存维护

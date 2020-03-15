@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    host: 47.102.204.189
+    virtual-host: /
+    username: zl
+    password: lz.com
+ribbon:
+  ReadTimeout: 120000
+  ConnectTimeout: 30000

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,15 @@ import com.zl.gmall.pms.service.SkuSaleAttrValueService;
 public class SkuSaleAttrValueController {
     @Autowired
     private SkuSaleAttrValueService skuSaleAttrValueService;
+
+    //根据SKU查询销售属性
+    @GetMapping("sku/{skuId}")
+    public Resp<List<SkuSaleAttrValueEntity>> querySkuSaleById(@PathVariable("skuId")Long skuId){
+        List<SkuSaleAttrValueEntity> list = this.skuSaleAttrValueService.list(new QueryWrapper<SkuSaleAttrValueEntity>().eq("sku_id", skuId));
+
+        return Resp.ok(list);
+
+    }
 
     //根据SKU查询销售属性
     @GetMapping("{spuId}")

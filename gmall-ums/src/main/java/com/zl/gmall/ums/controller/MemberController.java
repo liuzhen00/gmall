@@ -33,6 +33,30 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    //数据校验
+    @GetMapping("check/{data}/{type}")
+    public Resp<Object> checkData(@PathVariable("data")String data,
+                                  @PathVariable("type")Integer type){
+        Boolean flag= this.memberService.checkData(data,type);
+        return Resp.ok(flag);
+    }
+
+    //用户注册
+    @PostMapping("/register")
+    public Resp<Object> registerUser(MemberEntity memberEntity,@RequestParam("code") String code){
+        this.memberService.registerUser(memberEntity,code);
+        return Resp.ok(null);
+
+    }
+
+    //根据用户名查询密码和用户
+    @GetMapping("/query")
+    public Resp<MemberEntity> queryUserNameAndPword(@RequestParam("username")String username,
+                                                    @RequestParam("password")String password){
+        MemberEntity memberEntity= this.memberService.queryUserNameAndPword(username,password);
+        return Resp.ok(memberEntity);
+    }
+
     /**
      * 列表
      */
